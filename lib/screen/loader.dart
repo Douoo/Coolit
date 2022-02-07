@@ -10,6 +10,36 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  Future getLocationData() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ErrorWidget(),
+          ));
+    }
+  }
+
+  Future getData() async {
+    WeatherModel weather = WeatherModel();
+    var data = await weather.getLocationWeather();
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainScreen(
+            weatherData: data,
+          ),
+        ),
+        (route) => false);
+  }
+
+  @override
+  void initState() {
+    getLocationData();
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
