@@ -13,6 +13,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
+  int? temprature;
+  int? feelAlikeTemp;
+  int? condition;
+  String? cityName;
+  String? weatherIcon;
+  String? weatherMsg;
+  String? conditionMain;
+  String? conditionDescription;
+  String? iconCode;
+  DateTime now = DateTime.now();
+  String? currentTime;
+  String? currentDate;
+
+  WeatherModel weather = WeatherModel();
+
+  void updateUI(var weatherData) {
+    temprature = weatherData['main']['temp'].toInt();
+    double feelTemp = weatherData['main']['feels_like'];
+    feelAlikeTemp = feelTemp.toInt();
+    condition = weatherData['weather'][0]['id'];
+    cityName = weatherData['name'];
+    conditionMain = weatherData['weather'][0]['main'];
+    conditionDescription = weatherData['weather'][0]['description'];
+    iconCode = weatherData['weather'][0]['icon'];
+    weatherIcon = weather.getWeatherIcon(condition!);
+    weatherMsg = weather.getMessage(temprature!);
+    currentTime = DateFormat('kk:mm a').format(now);
+    currentDate = DateFormat('EEE d MMM').format(now);
+  }
   Future getLocationData() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -20,9 +49,9 @@ class _MyHomePageState extends State<HomePage> {
     }
   }
 
-  @override
+    @override
   void initState() {
-    getLocationData();
+    updateUI(widget.weatherData);
     super.initState();
   }
 
