@@ -6,6 +6,7 @@ import 'location.dart';
 
 
 const openWeatherMapUrl = 'https://api.openweathermap.org/data/2.5/weather';
+const apiKey = 'Insert your API key here';
 
 class WeatherModel {
   Future<dynamic> getCityWeather(String cityName) async {
